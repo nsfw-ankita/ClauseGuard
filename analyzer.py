@@ -17,7 +17,7 @@ from schemas import AnalysisResult
 
 load_dotenv()
 
-DEFAULT_MODEL = "gemini-2.5-flash"  # Check https://ai.google.dev/gemini-api/docs/models for current model names.
+DEFAULT_MODEL = "gemini-3.5-flash"  # Check https://ai.google.dev/gemini-api/docs/models for current model names.
 
 
 class AnalyzerError(Exception):
