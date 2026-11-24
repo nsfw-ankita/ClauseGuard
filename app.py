@@ -13,71 +13,81 @@ from rules import calculate_score, check_rules, merge_missing_clauses
 
 load_dotenv()
 
-st.set_page_config(page_title="ClauseGuard", page_icon="🛡️", layout="wide")
+st.set_page_config(page_title="ClauseGuard", layout="wide")
 
 LANG_COPY = {
     "English": {
-        "tagline": "Sign smart, not blind.",
+        "tagline": "Review rent agreements with clarity.",
         "language": "Language",
-        "upload_pdf": "Upload PDF",
-        "upload_photo": "Upload photo",
-        "paste_text": "Paste text",
-        "check": "Check my agreement",
-        "checking": "Checking your agreement...",
-        "privacy": "Privacy: your agreement is checked in memory and not saved by this app.",
+        "input_method": "Input method",
+        "upload_pdf": "PDF document",
+        "upload_photo": "Photo",
+        "paste_text": "Pasted text",
+        "check": "Review agreement",
+        "checking": "Reviewing agreement...",
+        "privacy": "Privacy: your agreement is processed in memory and is not saved.",
         "disclaimer": DISCLAIMER,
-        "no_input": "Please upload a PDF, upload a photo, or paste text first.",
-        "not_rent": "This does not look like a rent agreement. Please upload a rent agreement.",
-        "score": "Agreement Score",
-        "red": "Red flags",
-        "yellow": "Check this",
-        "green": "Looks fine",
-        "missing": "Missing things",
-        "ask": "What to ask the landlord to change",
-        "no_red": "No major red flags found.",
-        "no_yellow": "No warning items found.",
-        "no_green": "No green items found.",
-        "no_missing": "No important missing things found.",
-        "no_changes": "No changes suggested.",
+        "no_input": "Please provide a PDF, photo, or pasted text before continuing.",
+        "not_rent": "This document does not appear to be a rent agreement.",
+        "score": "Agreement score",
+        "red": "High risk",
+        "yellow": "Needs attention",
+        "green": "Acceptable",
+        "missing": "Missing provisions",
+        "ask": "Suggested requests",
+        "no_red": "No high-risk items identified.",
+        "no_yellow": "No items requiring attention.",
+        "no_green": "No acceptable items to display.",
+        "no_missing": "No missing provisions identified.",
+        "no_changes": "No suggested requests at this time.",
         "download": "Download report",
-        "copy_hint": "You can copy this message:",
-        "mock": "Demo mode is ON (MOCK_AI=true). No API key needed.",
-        "api_missing": "API key not found. Add GEMINI_API_KEY in .env or set MOCK_AI=true for demo mode.",
-        "analyzing_pdf": "Reading your PDF...",
-        "analyzing_photo": "Reading your photo...",
-        "analyzing_text": "Reading your text...",
+        "copy_hint": "You may copy this message:",
+        "mock": "Demo mode is active (MOCK_AI=true). No API key required.",
+        "api_missing": "API key not found. Add GEMINI_API_KEY in .env, or set MOCK_AI=true for demo mode.",
+        "analyzing_pdf": "Reading PDF...",
+        "analyzing_photo": "Reading photo...",
+        "analyzing_text": "Reading text...",
+        "model": "Model",
     },
     "Hindi": {
-        "tagline": "समझदारी से साइन करें।",
+        "tagline": "किराया समझौतों की स्पष्ट समीक्षा।",
         "language": "भाषा",
-        "upload_pdf": "PDF अपलोड करें",
-        "upload_photo": "फोटो अपलोड करें",
-        "paste_text": "टेक्स्ट चिपकाएं",
-        "check": "मेरा समझौता जांचें",
-        "checking": "आपका समझौता जांचा जा रहा है...",
-        "privacy": "गोपनीयता: आपका समझौता सिर्फ अभी जांचने के लिए उपयोग होता है, इसे सेव नहीं किया जाता।",
+        "input_method": "इनपुट विधि",
+        "upload_pdf": "PDF दस्तावेज़",
+        "upload_photo": "फोटो",
+        "paste_text": "पेस्ट किया गया टेक्स्ट",
+        "check": "समझौते की समीक्षा करें",
+        "checking": "समझौते की समीक्षा हो रही है...",
+        "privacy": "गोपनीयता: आपका समझौता केवल मेमोरी में प्रोसेस होता है और सहेजा नहीं जाता।",
         "disclaimer": "यह केवल सामान्य जानकारी है, कानूनी सलाह नहीं।",
-        "no_input": "कृपया पहले PDF, फोटो या टेक्स्ट डालें।",
-        "not_rent": "यह किराये का समझौता नहीं लग रहा है। कृपया किराये का समझौता डालें।",
+        "no_input": "कृपया आगे बढ़ने से पहले PDF, फोटो, या टेक्स्ट प्रदान करें।",
+        "not_rent": "यह दस्तावेज़ किराया समझौता नहीं लगता।",
         "score": "समझौता स्कोर",
-        "red": "लाल झंडे",
-        "yellow": "ध्यान दें",
-        "green": "ठीक लग रहा है",
-        "missing": "गायब बातें",
-        "ask": "मकान मालिक से क्या बदलने को कहें",
-        "no_red": "कोई बड़ा लाल झंडा नहीं मिला।",
-        "no_yellow": "कोई चेतावनी नहीं मिली।",
-        "no_green": "कोई हरी बात नहीं मिली।",
-        "no_missing": "कोई जरूरी बात गायब नहीं मिली।",
-        "no_changes": "कोई बदलाव सुझाव नहीं।",
+        "red": "उच्च जोखिम",
+        "yellow": "ध्यान देने योग्य",
+        "green": "स्वीकार्य",
+        "missing": "अनुपलब्ध प्रावधान",
+        "ask": "सुझाए गए अनुरोध",
+        "no_red": "कोई उच्च जोखिम वाला बिंदु नहीं मिला।",
+        "no_yellow": "ध्यान देने योग्य कोई बिंदु नहीं मिला।",
+        "no_green": "दिखाने के लिए कोई स्वीकार्य बिंदु नहीं है।",
+        "no_missing": "कोई अनुपलब्ध प्रावधान नहीं मिला।",
+        "no_changes": "इस समय कोई सुझाव नहीं है।",
         "download": "रिपोर्ट डाउनलोड करें",
-        "copy_hint": "आप यह संदेश कॉपी कर सकते हैं:",
-        "mock": "डेमो मोड चालू है (MOCK_AI=true)। API key की जरूरत नहीं।",
-        "api_missing": "API key नहीं मिली। .env में GEMINI_API_KEY डालें या डेमो के लिए MOCK_AI=true करें।",
-        "analyzing_pdf": "आपका PDF पढ़ा जा रहा है...",
-        "analyzing_photo": "आपकी फोटो पढ़ी जा रही है...",
-        "analyzing_text": "आपका टेक्स्ट पढ़ा जा रहा है...",
+        "copy_hint": "आप इस संदेश को कॉपी कर सकते हैं:",
+        "mock": "डेमो मोड सक्रिय है (MOCK_AI=true)। API key आवश्यक नहीं है।",
+        "api_missing": "API key नहीं मिली। .env में GEMINI_API_KEY जोड़ें, या डेमो मोड के लिए MOCK_AI=true सेट करें।",
+        "analyzing_pdf": "PDF पढ़ा जा रहा है...",
+        "analyzing_photo": "फोटो पढ़ी जा रही है...",
+        "analyzing_text": "टेक्स्ट पढ़ा जा रहा है...",
+        "model": "मॉडल",
     },
+}
+
+RISK_ACCENTS = {
+    "green": "#5a7a66",
+    "yellow": "#8a7a52",
+    "red": "#8a5a5a",
 }
 
 
@@ -89,17 +99,202 @@ def inject_css() -> None:
     st.markdown(
         """
         <style>
-        html, body, [class*="css"]  { font-size: 18px; }
-        .stButton>button { width: 100%; font-size: 1.2rem; padding: 0.8rem 1rem; border-radius: 12px; }
-        .score-card { padding: 1.2rem; border-radius: 16px; color: #111; margin-bottom: 1rem; }
-        .score-green { background: #d4f4dd; border: 2px solid #2e7d32; }
-        .score-yellow { background: #fff3cd; border: 2px solid #b28704; }
-        .score-red { background: #fde2e1; border: 2px solid #c62828; }
-        .flag-card { padding: 0.9rem; border-radius: 12px; margin-bottom: 0.6rem; }
-        .flag-red { background: #fff5f5; border-left: 8px solid #d32f2f; }
-        .flag-yellow { background: #fffaf0; border-left: 8px solid #ed6c02; }
-        .flag-green { background: #f4fff6; border-left: 8px solid #2e7d32; }
-        .small-note { font-size: 0.95rem; color: #444; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg: #f7f7f5;
+            --surface: #ffffff;
+            --text: #1f2328;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --accent: #3f4a5a;
+        }
+
+        html, body, [class*="css"], .stApp {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+
+        .stApp {
+            background: var(--bg);
+        }
+
+        .block-container {
+            max-width: 980px;
+            padding-top: 2.5rem;
+            padding-bottom: 3rem;
+        }
+
+        #MainMenu, footer, header[data-testid="stHeader"] {
+            visibility: hidden;
+            height: 0;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Inter', system-ui, sans-serif;
+            letter-spacing: -0.02em;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .cg-title {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.2rem;
+            color: var(--text);
+        }
+
+        .cg-tagline {
+            font-size: 1rem;
+            color: var(--muted);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .cg-meta {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 0.25rem;
+        }
+
+        .stButton>button {
+            width: 100%;
+            background: var(--text);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 0.7rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
+        .stButton>button:hover {
+            background: #374151;
+            color: #fff;
+        }
+
+        .stButton>button:focus {
+            box-shadow: none;
+            outline: 1px solid var(--accent);
+        }
+
+        div[data-testid="stRadio"] label {
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .score-card {
+            background: var(--surface);
+            padding: 1.5rem 1.5rem 1.5rem 1.25rem;
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            border-radius: 2px;
+            margin: 1.5rem 0;
+        }
+
+        .score-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .score-value {
+            font-size: 2.75rem;
+            font-weight: 600;
+            line-height: 1;
+            letter-spacing: -0.03em;
+            color: var(--text);
+        }
+
+        .score-max {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--muted);
+            margin-left: 0.15rem;
+        }
+
+        .score-status {
+            font-size: 0.95rem;
+            color: var(--muted);
+            margin-top: 0.6rem;
+        }
+
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            margin: 1.75rem 0 0.75rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .flag-card {
+            background: var(--surface);
+            padding: 1rem 1rem 1rem 1.1rem;
+            border: 1px solid var(--border);
+            border-left: 2px solid var(--border);
+            border-radius: 2px;
+            margin-bottom: 0.6rem;
+        }
+
+        .flag-red { border-left-color: #8a5a5a; }
+        .flag-yellow { border-left-color: #8a7a52; }
+        .flag-green { border-left-color: #5a7a66; }
+
+        .flag-title {
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 0.25rem;
+            line-height: 1.45;
+        }
+
+        .flag-explanation {
+            font-size: 0.85rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .empty-note {
+            font-size: 0.88rem;
+            color: var(--muted);
+            padding: 0.5rem 0;
+        }
+
+        div[data-testid="stAlert"] {
+            border-radius: 2px;
+            border: 1px solid var(--border);
+        }
+
+        .stTextArea textarea, div[data-testid="stFileUploader"] section {
+            border-radius: 2px;
+            border-color: var(--border);
+        }
+
+        div[data-testid="stExpander"] {
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            background: var(--surface);
+        }
+
+        .stDownloadButton>button {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .stDownloadButton>button:hover {
+            background: var(--surface);
+            border-color: #9ca3af;
+            color: var(--text);
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -113,28 +308,36 @@ def init_state() -> None:
 
 
 def render_score(score: dict, language: str) -> None:
-    color = score["color"]
+    color = score.get("color", "yellow")
+    accent = RISK_ACCENTS.get(color, RISK_ACCENTS["yellow"])
     label = score["label_hi"] if language == "Hindi" else score["label_en"]
     st.markdown(
         f"""
-        <div class="score-card score-{color}">
-            <div style="font-size:1.1rem;">{t(language, 'score')}</div>
-            <div style="font-size:3rem; font-weight:700; line-height:1.1;">{score['score']}/10</div>
-            <div style="font-size:1.4rem; font-weight:600;">{label}</div>
+        <div class="score-card" style="border-left-color: {accent};">
+            <div class="score-label">{t(language, 'score')}</div>
+            <div class="score-value">{score['score']}<span class="score-max">/10</span></div>
+            <div class="score-status">{label}</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
 
+def render_section_title(title: str) -> None:
+    st.markdown(f'<div class="section-title">{title}</div>', unsafe_allow_html=True)
+
+
 def render_clauses(clauses: list, color: str, language: str, empty_key: str) -> None:
     items = [c for c in clauses if c.color == color]
     if not items:
-        st.info(t(language, empty_key))
+        st.markdown(f'<div class="empty-note">{t(language, empty_key)}</div>', unsafe_allow_html=True)
         return
     for c in items:
         st.markdown(
-            f"""<div class="flag-card flag-{color}"><b>{c.clause_text}</b><br><span class="small-note">{c.explanation}</span></div>""",
+            f"""<div class="flag-card flag-{color}">
+                <div class="flag-title">{c.clause_text}</div>
+                <div class="flag-explanation">{c.explanation}</div>
+            </div>""",
             unsafe_allow_html=True,
         )
 
@@ -170,7 +373,9 @@ def run_analysis(language: str, input_mode: str, pdf_file, image_file, pasted_te
             return
         kwargs["text"] = pasted_text
 
-    status_key = {"pdf": "analyzing_pdf", "image": "analyzing_photo", "text": "analyzing_text"}.get(input_mode, "checking")
+    status_key = {"pdf": "analyzing_pdf", "image": "analyzing_photo", "text": "analyzing_text"}.get(
+        input_mode, "checking"
+    )
     try:
         with st.status(t(language, status_key), expanded=False) as status:
             analysis = analyze_agreement(**kwargs)
@@ -179,14 +384,17 @@ def run_analysis(language: str, input_mode: str, pdf_file, image_file, pasted_te
         st.session_state.error = str(exc)
         return
     except Exception:
-        st.session_state.error = "Something went wrong. Please try again." if language == "English" else "कुछ गलत हुआ। कृपया फिर कोशिश करें।"
+        st.session_state.error = (
+            "Something went wrong. Please try again."
+            if language == "English"
+            else "कुछ गलत हुआ। कृपया फिर कोशिश करें।"
+        )
         return
 
     if not analysis.document_type_ok:
         st.session_state.error = t(language, "not_rent")
         return
 
-    # For rule checks, prefer extracted/pasted text; for image-only/scanned, use clause text as fallback.
     rule_text = ""
     if input_mode == "pdf" and pdf_file is not None:
         rule_text = get_agreement_text_from_pdf(pdf_file) or ""
@@ -218,50 +426,52 @@ def main() -> None:
     init_state()
     inject_css()
 
-    st.title("ClauseGuard 🛡️")
+    st.markdown('<div class="cg-title">ClauseGuard</div>', unsafe_allow_html=True)
     language = st.radio(
-        "Language / भाषा",
-        ["Hindi", "English"],
+        "Language",
+        ["English", "Hindi"],
         horizontal=True,
         label_visibility="collapsed",
     )
-    st.markdown(f"### {t(language, 'tagline')}")
+    st.markdown(f'<div class="cg-tagline">{t(language, "tagline")}</div>', unsafe_allow_html=True)
     st.caption(t(language, "privacy"))
-    st.warning(t(language, "disclaimer"))
+    st.info(t(language, "disclaimer"))
 
     if is_mock_mode():
         st.info(t(language, "mock"))
     elif not os.getenv("GEMINI_API_KEY", "").strip():
-        st.info(t(language, "api_missing"))
-    st.caption(f"Model: {get_model_name()}")
+        st.warning(t(language, "api_missing"))
+    st.markdown(f'<div class="cg-meta">{t(language, "model")}: {get_model_name()}</div>', unsafe_allow_html=True)
 
-    tab_pdf, tab_photo, tab_text = st.tabs([t(language, "upload_pdf"), t(language, "upload_photo"), t(language, "paste_text")])
-    with tab_pdf:
-        pdf_file = st.file_uploader("PDF", type=["pdf"], key="pdf_uploader", label_visibility="collapsed")
-    with tab_photo:
-        image_file = st.file_uploader("Photo", type=["jpg", "jpeg", "png"], key="img_uploader", label_visibility="collapsed")
-    with tab_text:
-        pasted_text = st.text_area("Text", height=220, key="pasted_text", label_visibility="collapsed", placeholder="Paste agreement text here / समझौता टेक्स्ट यहाँ चिपकाएं")
-
-    active = st.session_state.get("_active_tab", "pdf")
-    # Determine input by which widget has content; prioritize last non-empty in simple order.
-    input_mode = "text"
-    if pasted_text and pasted_text.strip():
-        input_mode = "text"
-    if image_file is not None:
-        input_mode = "image"
-    if pdf_file is not None:
-        input_mode = "pdf"
-    # Better: use radio-like selection? Keep simple: prefer the tab with content, but user can have multiple; we pick most recent by checking session changes is complex.
-    # Use explicit selector for clarity.
     input_mode = st.radio(
-        "Input",
+        t(language, "input_method"),
         ["pdf", "image", "text"],
-        format_func=lambda x: {"pdf": t(language, "upload_pdf"), "image": t(language, "upload_photo"), "text": t(language, "paste_text")}[x],
+        format_func=lambda x: {
+            "pdf": t(language, "upload_pdf"),
+            "image": t(language, "upload_photo"),
+            "text": t(language, "paste_text"),
+        }[x],
         horizontal=True,
-        index=["pdf", "image", "text"].index(input_mode),
-        label_visibility="collapsed",
     )
+
+    pdf_file = None
+    image_file = None
+    pasted_text = ""
+
+    if input_mode == "pdf":
+        pdf_file = st.file_uploader("PDF", type=["pdf"], key="pdf_uploader", label_visibility="collapsed")
+    elif input_mode == "image":
+        image_file = st.file_uploader(
+            "Photo", type=["jpg", "jpeg", "png"], key="img_uploader", label_visibility="collapsed"
+        )
+    else:
+        pasted_text = st.text_area(
+            "Text",
+            height=220,
+            key="pasted_text",
+            label_visibility="collapsed",
+            placeholder="Paste agreement text here / समझौता टेक्स्ट यहाँ पेस्ट करें",
+        )
 
     if st.button(t(language, "check"), type="primary"):
         with st.spinner(t(language, "checking")):
@@ -280,30 +490,30 @@ def main() -> None:
 
     render_score(score, language)
 
-    st.subheader(t(language, "red"))
+    render_section_title(t(language, "red"))
     render_clauses(analysis.clauses, "red", language, "no_red")
 
-    st.subheader(t(language, "yellow"))
+    render_section_title(t(language, "yellow"))
     render_clauses(analysis.clauses, "yellow", language, "no_yellow")
 
     with st.expander(t(language, "green")):
         render_clauses(analysis.clauses, "green", language, "no_green")
 
-    st.subheader(t(language, "missing"))
+    render_section_title(t(language, "missing"))
     if missing:
         for item in missing:
             st.markdown(f"- {item}")
     else:
-        st.info(t(language, "no_missing"))
+        st.markdown(f'<div class="empty-note">{t(language, "no_missing")}</div>', unsafe_allow_html=True)
 
-    st.subheader(t(language, "ask"))
+    render_section_title(t(language, "ask"))
     if analysis.suggested_changes:
         st.caption(t(language, "copy_hint"))
         for change in analysis.suggested_changes:
             st.markdown(f"**{change.issue}**")
             st.code(change.polite_request_message, language=None)
     else:
-        st.info(t(language, "no_changes"))
+        st.markdown(f'<div class="empty-note">{t(language, "no_changes")}</div>', unsafe_allow_html=True)
 
     if st.session_state.report:
         st.download_button(
