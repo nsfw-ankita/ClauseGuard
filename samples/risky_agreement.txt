@@ -1,0 +1,14 @@
+RENT AGREEMENT
+
+Landlord: Mr. Verma
+Tenant: Mr. Amit
+
+Rent is Rs. 25,000 per month. Security deposit is Rs. 1,00,000.
+
+The landlord can enter the house anytime.
+Rent can be increased anytime as landlord decides.
+Tenant cannot leave before 12 months. If tenant leaves early, full deposit will be lost.
+Tenant will pay all repairs, maintenance, and damages, including structural repairs.
+If rent is late by even one day, tenant must vacate immediately.
+Deposit will be returned when landlord feels appropriate.
+Electricity bill will be paid by tenant.
