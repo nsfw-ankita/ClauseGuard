@@ -20,9 +20,23 @@ ClauseGuard is a simple Streamlit app that helps people understand rent agreemen
 
 ## Screenshots
 
-<!-- Add screenshots here -->
+Add your screenshots to the `screenshots/` folder using these names:
+
 - `screenshots/home.png` - Home screen
 - `screenshots/results.png` - Results screen
+
+![ClauseGuard home screen](screenshots/home.png)
+![ClauseGuard results screen](screenshots/results.png)
+
+## Live demo
+
+No public live demo is deployed yet. You can run it locally in one command (below), or deploy to Streamlit Community Cloud:
+
+1. Push the repo to GitHub (already done).
+2. Go to [Streamlit Community Cloud](https://share.streamlit.io/) and create a new app from `nsfw-ankita/ClauseGuard`.
+3. Set app file to `app.py`.
+4. Add secrets/env vars: `GEMINI_API_KEY` and optionally `GEMINI_MODEL`.
+5. Deploy and add the URL here.
 
 ## Project structure
 
@@ -39,15 +53,29 @@ ClauseGuard/
 ├── .gitignore
 ├── LICENSE
 ├── README.md
+├── run_app.bat            # One-command Windows launcher
+├── screenshots/           # Add home.png and results.png here
 ├── samples/
 │   ├── safe_agreement.txt
 │   ├── risky_agreement.txt
 │   └── missing_clauses_agreement.txt
 └── tests/
-    └── test_rules.py
+    ├── test_rules.py
+    ├── test_analyzer.py
+    └── test_report.py
 ```
 
 ## Windows setup
+
+### One-command run
+
+```bat
+run_app.bat
+```
+
+This creates `.venv` if needed, installs dependencies, creates `.env` from `.env.example` if missing, and starts the app.
+
+### Manual setup
 
 1. **Install Python 3.10+** from [python.org](https://www.python.org/downloads/windows/). During install, check "Add Python to PATH".
 2. **Open PowerShell** and go to the project folder:
@@ -60,13 +88,6 @@ ClauseGuard/
 
    ```powershell
    python -m venv .venv
-   .\.venv\Scripts\Activate.ps1
-   ```
-
-   If PowerShell blocks activation, run:
-
-   ```powershell
-   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
    .\.venv\Scripts\Activate.ps1
    ```
 
@@ -116,7 +137,7 @@ This returns a fixed sample AI response so you can demo the app without an API k
 pytest
 ```
 
-Tests cover rule checks, Hindi keyword detection, missing-clause merging, and score calculation.
+Tests cover rule checks, Hindi keyword detection, missing-clause merging, score calculation, analyzer input/JSON/error handling, and PDF report generation.
 
 ## Rule checklist
 
@@ -145,14 +166,15 @@ The rules layer checks for:
 ## Limitations
 
 - AI can make mistakes or miss clauses; always read the full agreement.
-- Scanned/image quality affects extraction accuracy.
+- Scanned/image quality affects extraction accuracy; OCR/preprocessing is best-effort.
 - Rule checks use keyword/regex matching and may not catch every legal nuance.
 - Hindi support is for user-facing guidance; legal terms may vary by region.
 - Not a substitute for a qualified lawyer.
 
 ## Future scope
 
-- OCR fallback for low-quality scans
+- Stronger OCR pipeline for low-quality scans (Tesseract/vision fallback)
+- Public hosted demo
 - Support for more regional languages
 - State-specific rental rule hints
 - Clause-by-clause comparison between two agreements

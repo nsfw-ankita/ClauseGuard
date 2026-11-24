@@ -7,7 +7,7 @@ import os
 import streamlit as st
 from dotenv import load_dotenv
 
-from analyzer import AnalyzerError, analyze_agreement, extract_pdf_text, is_mock_mode
+from analyzer import AnalyzerError, analyze_agreement, extract_pdf_text, get_model_name, is_mock_mode
 from report import DISCLAIMER, PRIVACY_NOTE, build_report_pdf
 from rules import calculate_score, check_rules, merge_missing_clauses
 
@@ -43,6 +43,9 @@ LANG_COPY = {
         "copy_hint": "You can copy this message:",
         "mock": "Demo mode is ON (MOCK_AI=true). No API key needed.",
         "api_missing": "API key not found. Add GEMINI_API_KEY in .env or set MOCK_AI=true for demo mode.",
+        "analyzing_pdf": "Reading your PDF...",
+        "analyzing_photo": "Reading your photo...",
+        "analyzing_text": "Reading your text...",
     },
     "Hindi": {
         "tagline": "समझदारी से साइन करें।",
@@ -71,6 +74,9 @@ LANG_COPY = {
         "copy_hint": "आप यह संदेश कॉपी कर सकते हैं:",
         "mock": "डेमो मोड चालू है (MOCK_AI=true)। API key की जरूरत नहीं।",
         "api_missing": "API key नहीं मिली। .env में GEMINI_API_KEY डालें या डेमो के लिए MOCK_AI=true करें।",
+        "analyzing_pdf": "आपका PDF पढ़ा जा रहा है...",
+        "analyzing_photo": "आपकी फोटो पढ़ी जा रही है...",
+        "analyzing_text": "आपका टेक्स्ट पढ़ा जा रहा है...",
     },
 }
 
@@ -164,8 +170,11 @@ def run_analysis(language: str, input_mode: str, pdf_file, image_file, pasted_te
             return
         kwargs["text"] = pasted_text
 
+    status_key = {"pdf": "analyzing_pdf", "image": "analyzing_photo", "text": "analyzing_text"}.get(input_mode, "checking")
     try:
-        analysis = analyze_agreement(**kwargs)
+        with st.status(t(language, status_key), expanded=False) as status:
+            analysis = analyze_agreement(**kwargs)
+            status.update(label=t(language, "checking"), state="complete")
     except AnalyzerError as exc:
         st.session_state.error = str(exc)
         return
@@ -224,6 +233,7 @@ def main() -> None:
         st.info(t(language, "mock"))
     elif not os.getenv("GEMINI_API_KEY", "").strip():
         st.info(t(language, "api_missing"))
+    st.caption(f"Model: {get_model_name()}")
 
     tab_pdf, tab_photo, tab_text = st.tabs([t(language, "upload_pdf"), t(language, "upload_photo"), t(language, "paste_text")])
     with tab_pdf:
