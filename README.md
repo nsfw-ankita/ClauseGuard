@@ -20,13 +20,9 @@ ClauseGuard is a simple Streamlit app that helps people understand rent agreemen
 
 ## Screenshots
 
-Add your screenshots to the `screenshots/` folder using these names:
-
-- `screenshots/home.png` - Home screen
-- `screenshots/results.png` - Results screen
-
-![ClauseGuard home screen](screenshots/home.png)
-![ClauseGuard results screen](screenshots/results.png)
+![ClauseGuard home screen](screenshots/home-screen.png)
+![ClauseGuard analysis result](screenshots/analysis-result.png)
+![ClauseGuard report sections](screenshots/report-sections.png)
 
 ## Live demo
 
