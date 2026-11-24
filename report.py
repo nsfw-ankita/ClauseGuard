@@ -71,15 +71,15 @@ def build_report_pdf(
     green = [f"{c.clause_text} — {c.explanation}" for c in analysis.clauses if c.color == "green"]
 
     if language == "Hindi":
-        section("लाल झंडे", red, "कोई बड़ा लाल झंडा नहीं मिला।")
-        section("ध्यान दें", yellow, "कोई चेतावनी नहीं मिली।")
-        section("ठीक लग रहा है", green, "कोई हरी बात नहीं मिली।")
-        section("गायब बातें", missing_clauses, "कोई जरूरी बात गायब नहीं मिली।")
+        section("उच्च जोखिम", red, "कोई उच्च जोखिम वाला बिंदु नहीं मिला।")
+        section("ध्यान देने योग्य", yellow, "ध्यान देने योग्य कोई बिंदु नहीं मिला।")
+        section("स्वीकार्य", green, "कोई स्वीकार्य बिंदु नहीं मिला।")
+        section("अनुपलब्ध प्रावधान", missing_clauses, "कोई अनुपलब्ध प्रावधान नहीं मिला।")
     else:
-        section("Red flags", red, "No major red flags found.")
-        section("Check this", yellow, "No warning items found.")
-        section("Looks fine", green, "No green items found.")
-        section("Missing things", missing_clauses, "No important missing items found.")
+        section("High risk", red, "No high-risk items identified.")
+        section("Needs attention", yellow, "No items requiring attention.")
+        section("Acceptable", green, "No acceptable items identified.")
+        section("Missing provisions", missing_clauses, "No missing provisions identified.")
 
     story.append(Paragraph(_safe("Checklist" if language == "English" else "जांच सूची"), styles["Section"]))
     table_data = [[
@@ -107,7 +107,7 @@ def build_report_pdf(
     )
     story.append(table)
 
-    changes_title = "What to ask the landlord to change" if language == "English" else "मकान मालिक से क्या बदलने को कहें"
+    changes_title = "Suggested requests" if language == "English" else "सुझाए गए अनुरोध"
     story.append(Paragraph(_safe(changes_title), styles["Section"]))
     if not analysis.suggested_changes:
         story.append(Paragraph(_safe("No changes suggested." if language == "English" else "कोई बदलाव सुझाव नहीं।"), styles["Normal"]))
