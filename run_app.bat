@@ -25,5 +25,5 @@ if not exist ".env" (
   echo Add GEMINI_API_KEY in .env, or set MOCK_AI=true for demo mode.
 )
 
-echo Starting RentRakshak...
+echo Starting ClauseGuard...
 .\.venv\Scripts\python.exe -m streamlit run app.py

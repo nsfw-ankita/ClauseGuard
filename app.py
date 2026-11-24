@@ -1,4 +1,4 @@
-"""RentRakshak - AI rent agreement red-flag detector."""
+"""ClauseGuard - AI rent agreement red-flag detector."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from rules import calculate_score, check_rules, merge_missing_clauses
 
 load_dotenv()
 
-st.set_page_config(page_title="RentRakshak", page_icon="🏠", layout="wide")
+st.set_page_config(page_title="ClauseGuard", page_icon="🛡️", layout="wide")
 
 LANG_COPY = {
     "English": {
@@ -209,7 +209,7 @@ def main() -> None:
     init_state()
     inject_css()
 
-    st.title("RentRakshak 🏠")
+    st.title("ClauseGuard 🛡️")
     language = st.radio(
         "Language / भाषा",
         ["Hindi", "English"],
@@ -299,7 +299,7 @@ def main() -> None:
         st.download_button(
             t(language, "download"),
             data=st.session_state.report,
-            file_name="rentrakshak-report.pdf",
+            file_name="clauseguard-report.pdf",
             mime="application/pdf",
         )
 

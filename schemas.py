@@ -1,4 +1,4 @@
-"""Pydantic models for RentRakshak AI output validation."""
+"""Pydantic models for ClauseGuard AI output validation."""
 
 from typing import Literal
 

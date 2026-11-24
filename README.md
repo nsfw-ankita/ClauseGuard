@@ -1,8 +1,8 @@
-# RentRakshak 🏠
+# ClauseGuard 🛡️
 
 **Sign smart, not blind.**
 
-RentRakshak is a simple Streamlit app that helps people understand rent agreements. It highlights risky clauses, missing important points, and suggests polite messages to ask the landlord for changes. It is designed for non-technical users, with simple language and Hindi/English support.
+ClauseGuard is a simple Streamlit app that helps people understand rent agreements. It highlights risky clauses, missing important points, and suggests polite messages to ask the landlord for changes. It is designed for non-technical users, with simple language and Hindi/English support.
 
 > **Disclaimer:** General guidance only, not legal advice.
 
@@ -27,7 +27,7 @@ RentRakshak is a simple Streamlit app that helps people understand rent agreemen
 ## Project structure
 
 ```text
-RentRakshak/
+ClauseGuard/
 ├── app.py                 # Streamlit UI
 ├── analyzer.py            # Input handling + Gemini analysis
 ├── rules.py               # Rule checklist + scoring
@@ -53,7 +53,7 @@ RentRakshak/
 2. **Open PowerShell** and go to the project folder:
 
    ```powershell
-   cd path\to\RentRakshak
+   cd path\to\ClauseGuard
    ```
 
 3. **Create and activate a virtual environment**:

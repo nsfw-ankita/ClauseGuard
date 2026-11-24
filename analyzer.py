@@ -1,4 +1,4 @@
-"""Input handling and Gemini-powered analysis for RentRakshak."""
+"""Input handling and Gemini-powered analysis for ClauseGuard."""
 
 from __future__ import annotations
 

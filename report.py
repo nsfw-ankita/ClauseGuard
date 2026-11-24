@@ -1,4 +1,4 @@
-"""Report generation for RentRakshak."""
+"""Report generation for ClauseGuard."""
 
 from __future__ import annotations
 
@@ -48,7 +48,7 @@ def build_report_pdf(
     styles.add(ParagraphStyle(name="Section", parent=styles["Heading3"], spaceBefore=8, spaceAfter=4))
 
     story = []
-    title = "RentRakshak Report" if language == "English" else "RentRakshak रिपोर्ट"
+    title = "ClauseGuard Report" if language == "English" else "ClauseGuard रिपोर्ट"
     story.append(Paragraph(_safe(title), styles["Title"]))
     story.append(Paragraph(_safe(DISCLAIMER), styles["Small"]))
     story.append(Paragraph(_safe(PRIVACY_NOTE), styles["Small"]))
